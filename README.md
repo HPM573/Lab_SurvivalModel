@@ -1,1 +1,1 @@
-# Labs: Survival Model
+# Lab: Survival Model
