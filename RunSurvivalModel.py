@@ -1,5 +1,5 @@
 import SurvivalModelClasses as Cls
-import SimPy.SamplePathClasses as SamplePathSupport
+import SimPy.SamplePathClasses as PathCls
 import SimPy.FigureSupport as Fig
 
 MORTALITY_PROB = 0.1
@@ -12,7 +12,7 @@ myCohort = Cls.Cohort(id=1, pop_size=5000, mortality_prob=MORTALITY_PROB)
 myCohort.simulate(TIME_STEPS)
 
 # plot the sample path
-SamplePathSupport.graph_sample_path(
+PathCls.graph_sample_path(
     sample_path=myCohort.cohortOutcomes.nLivingPatients,
     title='Survival Curve',
     x_label='Time-Step (Year)',
