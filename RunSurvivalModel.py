@@ -3,10 +3,10 @@ import SimPy.SamplePathClasses as SamplePathSupport
 import SimPy.FigureSupport as Fig
 
 MORTALITY_PROB = 0.1
-TIME_STEPS = 40
+TIME_STEPS = 100
 
 # create a cohort
-myCohort = Cls.Cohort(id=1, pop_size=1000, mortality_prob=MORTALITY_PROB)
+myCohort = Cls.Cohort(id=1, pop_size=5000, mortality_prob=MORTALITY_PROB)
 
 # simulate the cohort over the specified time steps
 myCohort.simulate(TIME_STEPS)

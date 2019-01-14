@@ -66,10 +66,6 @@ class Cohort:
         for patient in self.patients:
             # simulate
             patient.simulate(n_time_steps)
-            # record survival time
-            survival_time = patient.survivalTime
-            if not (survival_time is None):
-                self.cohortOutcomes.survivalTimes.append(survival_time)
 
         # store outputs of this simulation
         self.cohortOutcomes.extract_outcomes(self)
@@ -85,6 +81,11 @@ class CohortOutcomes:
     def extract_outcomes(self, simulated_cohort):
         """ extracts outcomes of a simulated cohort
         :param simulated_cohort: a cohort after being simulated"""
+
+        # record survival times
+        for patient in simulated_cohort.patients:
+            if not (patient.survivalTime is None):
+                self.survivalTimes.append(patient.survivalTime)
 
         # calculate mean survival time
         self.meanSurvivalTime = sum(self.survivalTimes)/len(self.survivalTimes)
