@@ -91,12 +91,10 @@ class CohortOutcomes:
         self.meanSurvivalTime = sum(self.survivalTimes)/len(self.survivalTimes)
 
         # survival curve
-        self.nLivingPatients = PathCls.SamplePathBatchUpdate(
+        self.nLivingPatients = PathCls.PrevalencePathBatchUpdate(
             name='# of living patients',
             initial_size=simulated_cohort.initialPopSize,
+            times_of_changes=self.survivalTimes,
+            increments=[-1]*len(self.survivalTimes),
             sim_rep=simulated_cohort.id
         )
-
-        # record the times of deaths
-        for obs in self.survivalTimes:
-            self.nLivingPatients.record(time=obs, increment=-1)
