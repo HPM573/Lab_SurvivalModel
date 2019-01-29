@@ -2,8 +2,8 @@ import SurvivalModelClasses as Cls
 import SimPy.SamplePathClasses as PathCls
 import SimPy.FigureSupport as Fig
 
-MORTALITY_PROB = 0.1
-TIME_STEPS = 100
+MORTALITY_PROB = 0.1    # annual probability of death
+TIME_STEPS = 100        # years
 
 # create a cohort
 myCohort = Cls.Cohort(id=1, pop_size=5000, mortality_prob=MORTALITY_PROB)
