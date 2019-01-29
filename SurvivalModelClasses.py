@@ -36,4 +36,3 @@ class Patient:
 
             # increment time
             t += 1
-
