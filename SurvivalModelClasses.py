@@ -1,6 +1,5 @@
 from enum import Enum
 import numpy as np
-import SimPy.SamplePathClasses as PathCls
 
 
 class HealthStat(Enum):
@@ -37,4 +36,3 @@ class Patient:
 
             # increment time
             t += 1
-
