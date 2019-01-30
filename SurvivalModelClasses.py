@@ -68,7 +68,7 @@ class Cohort:
             patient.simulate(n_time_steps)
 
         # store outputs of this simulation
-        self.cohortOutcomes.extract_outcomes(self)
+        self.cohortOutcomes.extract_outcomes(self.patients)
 
 
 class CohortOutcomes:
@@ -78,12 +78,12 @@ class CohortOutcomes:
         self.meanSurvivalTime = None   # mean survival times
         self.nLivingPatients = None   # survival curve (sample path of number of alive patients over time)
 
-    def extract_outcomes(self, simulated_cohort):
+    def extract_outcomes(self, simulated_patients):
         """ extracts outcomes of a simulated cohort
-        :param simulated_cohort: a cohort after being simulated"""
+        :param simulated_patients: (list) of patients after being simulated """
 
         # record survival times
-        for patient in simulated_cohort.patients:
+        for patient in simulated_patients:
             if not (patient.survivalTime is None):
                 self.survivalTimes.append(patient.survivalTime)
 
@@ -93,8 +93,7 @@ class CohortOutcomes:
         # survival curve
         self.nLivingPatients = PathCls.PrevalencePathBatchUpdate(
             name='# of living patients',
-            initial_size=simulated_cohort.initialPopSize,
+            initial_size=len(simulated_patients),
             times_of_changes=self.survivalTimes,
-            increments=[-1]*len(self.survivalTimes),
-            sim_rep=simulated_cohort.id
+            increments=[-1]*len(self.survivalTimes)
         )
