@@ -16,7 +16,12 @@ class Patient:
         :param mortality_prob: probability of death during a time-step (must be in [0,1])
         """
         self.id = id
-        self.rng = np.random.RandomState(seed=id)  # random number generator for this patient
+        try:
+            self.rng = np.random.RandomState(seed=id)  # random number generator for this patient
+        except ValueError:
+            print(id)
+            quit()
+
         self.mortalityProb = mortality_prob
         self.healthState = HealthStat.ALIVE  # assuming all patients are alive at the beginning
         self.survivalTime = None   # won't be observed unless the patient dies
@@ -84,7 +89,7 @@ class CohortOutcomes:
 
         # record survival times
         for patient in simulated_patients:
-            if not (patient.survivalTime is None):
+            if patient.survivalTime is not None:
                 self.survivalTimes.append(patient.survivalTime)
 
         # calculate mean survival time
