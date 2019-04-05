@@ -50,20 +50,22 @@ class Cohort:
         """
         self.id = id
         self.initialPopSize = pop_size  # initial population size
+        self.mortalityProb = mortality_prob
         self.patients = []  # list of patients
         self.cohortOutcomes = CohortOutcomes()  # outcomes of the this simulated cohort
-
-        # populate the cohort
-        for i in range(pop_size):
-            # create a new patient (use id * pop_size + n as patient id)
-            patient = Patient(id=id * pop_size + i, mortality_prob=mortality_prob)
-            # add the patient to the cohort
-            self.patients.append(patient)
 
     def simulate(self, n_time_steps):
         """ simulate the cohort of patients over the specified number of time-steps
         :param n_time_steps: number of time steps to simulate the cohort
         """
+
+        # populate the cohort
+        for i in range(self.initialPopSize):
+            # create a new patient (use id * pop_size + n as patient id)
+            patient = Patient(id=self.id * self.initialPopSize + i, mortality_prob=self.mortalityProb)
+            # add the patient to the cohort
+            self.patients.append(patient)
+
         # simulate all patients
         for patient in self.patients:
             # simulate
@@ -74,6 +76,7 @@ class Cohort:
 
         # clear the patients
         self.patients.clear()
+
 
 class CohortOutcomes:
     def __init__(self):
