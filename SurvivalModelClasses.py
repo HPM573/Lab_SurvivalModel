@@ -16,18 +16,15 @@ class Patient:
         :param mortality_prob: probability of death during a time-step (must be in [0,1])
         """
         self.id = id
-        try:
-            self.rng = np.random.RandomState(seed=id)  # random number generator for this patient
-        except ValueError:
-            print(id)
-            quit()
-
+        self.rng = None
         self.mortalityProb = mortality_prob
         self.healthState = HealthStat.ALIVE  # assuming all patients are alive at the beginning
         self.survivalTime = None   # won't be observed unless the patient dies
 
     def simulate(self, n_time_steps):
         """ simulate the patient over the specified simulation length """
+
+        self.rng = np.random.RandomState(seed=self.id)  # random number generator for this patient
 
         t = 0  # simulation current time
 
@@ -75,6 +72,8 @@ class Cohort:
         # store outputs of this simulation
         self.cohortOutcomes.extract_outcomes(self.patients)
 
+        # clear the patients
+        self.patients.clear()
 
 class CohortOutcomes:
     def __init__(self):
