@@ -1,6 +1,6 @@
 import SurvivalModelClasses as Cls
-import SimPy.SamplePathClasses as PathCls
-import SimPy.FigureSupport as Fig
+import SimPy.Plots.Histogram as Hist
+import SimPy.Plots.SamplePaths as Path
 
 MORTALITY_PROB = 0.1    # annual probability of death
 TIME_STEPS = 100        # years
@@ -12,14 +12,14 @@ myCohort = Cls.Cohort(id=1, pop_size=5000, mortality_prob=MORTALITY_PROB)
 myCohort.simulate(TIME_STEPS)
 
 # plot the sample path
-PathCls.graph_sample_path(
+Path.plot_sample_path(
     sample_path=myCohort.cohortOutcomes.nLivingPatients,
     title='Survival Curve',
     x_label='Time-Step (Year)',
     y_label='Number Survived')
 
 # plot the histogram
-Fig.graph_histogram(
+Hist.plot_histogram(
     data=myCohort.cohortOutcomes.survivalTimes,
     title='Histogram of Patient Survival Time',
     x_label='Survival Time (Year)',

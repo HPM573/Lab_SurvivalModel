@@ -16,17 +16,17 @@ class Patient:
         :param mortality_prob: probability of death during a time-step (must be in [0,1])
         """
         self.id = id
-        self.rng = None
+        self.rng = None  # random number generator for this patient
         self.mortalityProb = mortality_prob
         self.healthState = HealthStat.ALIVE  # assuming all patients are alive at the beginning
-        self.survivalTime = None   # won't be observed unless the patient dies
+        self.survivalTime = None  # won't be observed unless the patient dies
 
     def simulate(self, n_time_steps):
         """ simulate the patient over the specified simulation length """
 
-        self.rng = np.random.RandomState(seed=self.id)  # random number generator for this patient
+        self.rng = np.random.RandomState(seed=self.id)
 
-        t = 0  # simulation current time
+        t = 0  # current time step
 
         # while the patient is alive and simulation length is not yet reached
         while self.healthState == HealthStat.ALIVE and t < n_time_steps:
@@ -82,7 +82,7 @@ class CohortOutcomes:
     def __init__(self):
 
         self.survivalTimes = []    # survival times
-        self.meanSurvivalTime = None   # mean survival times
+        self.meanSurvivalTime = None   # mean survival time
         self.nLivingPatients = None   # survival curve (sample path of number of alive patients over time)
 
     def extract_outcomes(self, simulated_patients):
