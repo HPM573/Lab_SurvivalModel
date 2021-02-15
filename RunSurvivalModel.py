@@ -7,7 +7,7 @@ TIME_STEPS = 40         # years
 myPatient = Patient(id=1, mortality_prob=MORTALITY_PROB)
 
 # simulate the patient over the specified time steps
-myPatient.simulate(TIME_STEPS)
+myPatient.simulate(n_time_steps=TIME_STEPS)
 
 # print the patient survival time
 print(myPatient.survivalTime)
