@@ -49,7 +49,7 @@ class Cohort:
         :param mortality_prob: probability of death for each patient in this cohort over a time-step (must be in [0,1])
         """
         self.id = id
-        self.initialPopSize = pop_size  # initial population size
+        self.popSize = pop_size  # initial population size
         self.mortalityProb = mortality_prob
         self.patients = []  # list of patients
         self.cohortOutcomes = CohortOutcomes()  # outcomes of the this simulated cohort
@@ -60,9 +60,9 @@ class Cohort:
         """
 
         # populate the cohort
-        for i in range(self.initialPopSize):
+        for i in range(self.popSize):
             # create a new patient (use id * pop_size + n as patient id)
-            patient = Patient(id=self.id * self.initialPopSize + i, mortality_prob=self.mortalityProb)
+            patient = Patient(id=self.id * self.popSize + i, mortality_prob=self.mortalityProb)
             # add the patient to the cohort
             self.patients.append(patient)
 
