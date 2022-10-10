@@ -1,6 +1,7 @@
 from enum import Enum
+
 import numpy as np
-import SimPy.SamplePath as PathCls
+from deampy.sample_path import PrevalencePathBatchUpdate
 
 
 class HealthStat(Enum):
@@ -26,19 +27,19 @@ class Patient:
         # random number generator
         rng = np.random.RandomState(seed=self.id)
 
-        t = 0  # current time step
+        k = 1  # current simulation year
 
         # while the patient is alive and simulation length is not yet reached
-        while self.healthState == HealthStat.ALIVE and t < n_time_steps:
+        while self.healthState == HealthStat.ALIVE and k < n_time_steps:
             # determine if the patient will die during this time-step
             if rng.random_sample() < self.mortalityProb:
                 # update the health state to death
                 self.healthState = HealthStat.DEAD
                 # record the survival time (assuming deaths occurs at the end of this period)
-                self.survivalTime = t + 1
+                self.survivalTime = k
 
             # increment time
-            t += 1
+            k += 1
 
 
 class Cohort:
@@ -51,31 +52,26 @@ class Cohort:
         self.id = id
         self.popSize = pop_size  # initial population size
         self.mortalityProb = mortality_prob
-        self.patients = []  # list of patients
-        self.cohortOutcomes = CohortOutcomes()  # outcomes of the this simulated cohort
+        self.cohortOutcomes = CohortOutcomes()  # outcomes of the simulated cohort
 
     def simulate(self, n_time_steps):
         """ simulate the cohort of patients over the specified number of time-steps
         :param n_time_steps: number of time steps to simulate the cohort
         """
 
-        # populate the cohort
+        # populate and simulate the cohort
         for i in range(self.popSize):
             # create a new patient (use id * pop_size + n as patient id)
             patient = Patient(id=self.id * self.popSize + i, mortality_prob=self.mortalityProb)
-            # add the patient to the cohort
-            self.patients.append(patient)
 
-        # simulate all patients
-        for patient in self.patients:
             # simulate
             patient.simulate(n_time_steps)
 
-        # store outputs of this simulation
-        self.cohortOutcomes.extract_outcomes(self.patients)
+            # store outputs of this simulation
+            self.cohortOutcomes.extract_outcome(patient)
 
-        # clear the patients
-        self.patients.clear()
+        # calculate cohort outcomes
+        self.cohortOutcomes.calculate_cohort_outcomes(initial_pop_size=self.popSize)
 
 
 class CohortOutcomes:
@@ -85,22 +81,26 @@ class CohortOutcomes:
         self.meanSurvivalTime = None   # mean survival time
         self.nLivingPatients = None   # survival curve (sample path of number of alive patients over time)
 
-    def extract_outcomes(self, simulated_patients):
-        """ extracts outcomes of a simulated cohort
-        :param simulated_patients: (list) of patients after being simulated """
+    def extract_outcome(self, simulated_patient):
+        """ extracts outcomes of a simulated patient
+        :param simulated_patient: a patient after being simulated """
 
         # record survival times
-        for patient in simulated_patients:
-            if patient.survivalTime is not None:
-                self.survivalTimes.append(patient.survivalTime)
+        if simulated_patient.survivalTime is not None:
+            self.survivalTimes.append(simulated_patient.survivalTime)
+
+    def calculate_cohort_outcomes(self, initial_pop_size):
+        """ calculates the cohort outcomes
+        :param initial_pop_size: initial population size
+        """
 
         # calculate mean survival time
         self.meanSurvivalTime = sum(self.survivalTimes)/len(self.survivalTimes)
 
         # survival curve
-        self.nLivingPatients = PathCls.PrevalencePathBatchUpdate(
+        self.nLivingPatients = PrevalencePathBatchUpdate(
             name='# of living patients',
-            initial_size=len(simulated_patients),
+            initial_size=initial_pop_size,
             times_of_changes=self.survivalTimes,
             increments=[-1]*len(self.survivalTimes)
         )

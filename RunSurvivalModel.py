@@ -1,6 +1,7 @@
+import deampy.plots.histogram as Hist
+import deampy.plots.sample_paths as Path
+
 from SurvivalModelClasses import Cohort
-import SimPy.Plots.Histogram as Hist
-import SimPy.Plots.SamplePaths as Path
 
 MORTALITY_PROB = 0.1    # annual probability of death
 TIME_STEPS = 100        # years
@@ -24,7 +25,8 @@ Hist.plot_histogram(
     data=myCohort.cohortOutcomes.survivalTimes,
     title='Histogram of Patient Survival Time',
     x_label='Survival Time (Year)',
-    y_label='Count')
+    y_label='Count',
+    bin_width=2)
 
 # print the patient survival time
 print('Mean survival time (years):',
