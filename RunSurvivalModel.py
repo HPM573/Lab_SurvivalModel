@@ -28,7 +28,9 @@ Hist.plot_histogram(
     title='Histogram of Patient Survival Time',
     x_label='Survival Time (Year)',
     y_label='Count',
-    bin_width=2)
+    bin_width=2,
+    figure_size=(4, 3.6),
+    file_name='histogram.png')
 
 # print the patient survival time
 print('Mean survival time (years):',
