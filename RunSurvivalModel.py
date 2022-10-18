@@ -17,8 +17,10 @@ myCohort.simulate(n_time_steps=TIME_STEPS)
 Path.plot_sample_path(
     sample_path=myCohort.cohortOutcomes.nLivingPatients,
     title='Survival Curve',
-    x_label='Time-Step (Year)',
-    y_label='Number Survived')
+    x_label='Simulation Year',
+    y_label='Number Alive',
+    figure_size=(4, 3.6),
+    file_name='survival_curve.png')
 
 # plot the histogram
 Hist.plot_histogram(
