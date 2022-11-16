@@ -20,7 +20,7 @@ Path.plot_sample_path(
     x_label='Simulation Year',
     y_label='Number Alive',
     figure_size=(4, 3.6),
-    file_name='survival_curve.png')
+    file_name='figs/survival_curve.png')
 
 # plot the histogram
 Hist.plot_histogram(
@@ -30,7 +30,7 @@ Hist.plot_histogram(
     y_label='Count',
     bin_width=2,
     figure_size=(4, 3.6),
-    file_name='histogram.png')
+    file_name='figs/histogram.png')
 
 # print the patient survival time
 print('Mean survival time (years):',
