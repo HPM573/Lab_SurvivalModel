@@ -1,4 +1,5 @@
 from enum import Enum
+
 import numpy as np
 
 
@@ -25,16 +26,16 @@ class Patient:
         # random number generator
         rng = np.random.RandomState(seed=self.id)
 
-        t = 0  # simulation current time
+        k = 1  # current simulation year
 
         # while the patient is alive and simulation length is not yet reached
-        while self.healthState == HealthStat.ALIVE and t < n_time_steps:
+        while self.healthState == HealthStat.ALIVE and k < n_time_steps:
             # determine if the patient will die during this time-step
             if rng.random_sample() < self.mortalityProb:
                 # update the health state to death
                 self.healthState = HealthStat.DEAD
                 # record the survival time (assuming deaths occurs at the end of this period)
-                self.survivalTime = t + 1
+                self.survivalTime = k
 
             # increment time
-            t += 1
+            k += 1
