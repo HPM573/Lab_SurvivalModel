@@ -3,7 +3,7 @@ from enum import Enum
 import numpy as np
 
 
-class HealthStat(Enum):
+class HealthState(Enum):
     """ health status of patients  """
     ALIVE = 1
     DEAD = 0
@@ -17,7 +17,7 @@ class Patient:
         """
         self.id = id
         self.mortalityProb = mortality_prob
-        self.healthState = HealthStat.ALIVE  # assuming all patients are alive at the beginning
+        self.healthState = HealthState.ALIVE  # assuming all patients are alive at the beginning
         self.survivalTime = None   # won't be observed unless the patient dies
 
     def simulate(self, n_time_steps):
@@ -29,11 +29,11 @@ class Patient:
         k = 1  # current simulation year
 
         # while the patient is alive and simulation length is not yet reached
-        while self.healthState == HealthStat.ALIVE and k < n_time_steps:
+        while self.healthState == HealthState.ALIVE and k < n_time_steps:
             # determine if the patient will die during this time-step
             if rng.random_sample() < self.mortalityProb:
                 # update the health state to death
-                self.healthState = HealthStat.DEAD
+                self.healthState = HealthState.DEAD
                 # record the survival time (assuming deaths occurs at the end of this period)
                 self.survivalTime = k
 
