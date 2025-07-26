@@ -1,6 +1,7 @@
 from enum import Enum
 
-import numpy as np
+from numpy import iinfo, int32
+from numpy.random import RandomState
 
 from deampy.sample_path import PrevalencePathBatchUpdate
 
@@ -22,11 +23,11 @@ class Patient:
         self.healthState = HealthState.ALIVE  # assuming all patients are alive at the beginning
         self.survivalTime = None  # won't be observed unless the patient dies
 
-    def simulate(self, n_time_steps):
+    def simulate(self, n_time_steps, seed):
         """ simulate the patient over the specified simulation length """
 
         # random number generator
-        rng = np.random.RandomState(seed=self.id)
+        rng = RandomState(seed=seed)
 
         k = 1  # current simulation year
 
@@ -55,10 +56,13 @@ class Cohort:
         self.mortalityProb = mortality_prob
         self.cohortOutcomes = CohortOutcomes()  # outcomes of the simulated cohort
 
-    def simulate(self, n_time_steps):
+    def simulate(self, n_time_steps, seed):
         """ simulate the cohort of patients over the specified number of time-steps
         :param n_time_steps: number of time steps to simulate the cohort
         """
+
+        # set the random seed
+        rng = RandomState(seed=seed)
 
         # populate and simulate the cohort
         for i in range(self.popSize):
@@ -66,7 +70,9 @@ class Cohort:
             patient = Patient(id=self.id * self.popSize + i, mortality_prob=self.mortalityProb)
 
             # simulate
-            patient.simulate(n_time_steps)
+            patient.simulate(
+                n_time_steps=n_time_steps,
+                seed=rng.randint(0, iinfo(int32).max))  # use a random seed for each patient
 
             # store outputs of this simulation
             self.cohortOutcomes.extract_outcome(patient)
